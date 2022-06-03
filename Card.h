@@ -30,7 +30,6 @@ class Card {
 
         int calcTrueValue(char value) {
             
-            
         }
 
     public:
