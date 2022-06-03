@@ -16,10 +16,10 @@
 #include <string>
 
 enum suit {
-            Diamond = 'd',
-            Heart = 'h',
-            Spade = 's',
-            Club = 'c'
+            Diamond,
+            Heart,
+            Spade,
+            Club
         };
 
 class Card {
@@ -36,6 +36,12 @@ class Card {
         Card() {
         }
 
+        Card(suit cardSuit, char cardValue) {
+            this->cardSuit = cardSuit;
+            this->cardValue = cardValue;
+            // TODO: Call trueValue function
+        }
+
         Card(suit cardSuit, char cardValue, int trueValue) {
             this->cardSuit = cardSuit;
             this->cardValue = cardValue;
@@ -43,7 +49,12 @@ class Card {
         }
 
         /* Getters */
-        char getSuit() {
+
+        suit getSuit() {
+            return cardSuit;
+        }
+
+        char getSuitAsChar() {
             switch (cardSuit)  {
                 case Diamond:
                     return 'd';
@@ -67,13 +78,19 @@ class Card {
         }
 
         /* Setters */
+        
         void setSuit(suit cardSuit) {
             this->cardSuit = cardSuit;
         }
 
-        int returnTrueValue(Card card) {
-
+        void setValue(int cardValue) {
+            this->cardValue = cardValue;
         }
+
+        void setTrueValue(int trueValue) {
+            this->trueValue = trueValue;
+        }
+
 };
 
 #endif // CARD_H

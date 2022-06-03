@@ -11,8 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "Card.h"
-
+#include "Deck.h"
 
 int main() {
     
