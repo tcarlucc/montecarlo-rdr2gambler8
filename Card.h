@@ -13,6 +13,7 @@
 #define CARD_H
 
 #include <vector>
+#include <iostream>
 #include <string>
 #include <cctype>
 
@@ -46,7 +47,7 @@ class Card {
         Card(suit cardSuit, char cardValue) {
             this->cardSuit = cardSuit;
             this->cardValue = cardValue;
-            // TODO: Call trueValue function
+            this->trueValue = calcTrueValue(cardValue);
         }
 
         Card(suit cardSuit, char cardValue, int trueValue) {
@@ -96,6 +97,24 @@ class Card {
 
         void setTrueValue(int trueValue) {
             this->trueValue = trueValue;
+        }
+
+        void toString() {
+            std::string output;
+            switch (cardSuit)  {
+                case Diamond:
+                    output += "♦";
+                case Heart:
+                    output += "♥";
+                case Spade:
+                    output += "♠";
+                case Club:
+                    output += "♣";
+                default:
+                    output += "?"; // Shouldn't happen
+            }
+
+            std::cout << output << std::endl;
         }
 
 };
