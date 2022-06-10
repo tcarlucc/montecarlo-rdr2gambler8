@@ -14,6 +14,7 @@
 
 #include <vector>
 #include <string>
+#include <cctype>
 
 enum suit {
             Diamond,
@@ -29,7 +30,13 @@ class Card {
         int trueValue;
 
         int calcTrueValue(char value) {
-            
+            if(isdigit(value)) {
+                return value;
+            } else if(value == 'j' || value == 'q' || value == 'k') {
+                return 10;
+            } else { 
+                return 11; // Ace
+            }
         }
 
     public:
