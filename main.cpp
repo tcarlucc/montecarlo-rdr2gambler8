@@ -15,6 +15,13 @@
 
 int main() {
     
+    Deck deck; // Initializes Deck
+    Card newCard = deck.draw();
+    std::cout << newCard << std::endl;
+
+    deck.shuffleDeck();
+    newCard = deck.draw();
+    std::cout << newCard << std::endl;
 
     return 0;
 }

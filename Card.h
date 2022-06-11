@@ -99,22 +99,21 @@ class Card {
             this->trueValue = trueValue;
         }
 
-        void toString() {
-            std::string output;
-            switch (cardSuit)  {
-                case Diamond:
-                    output += "♦";
-                case Heart:
-                    output += "♥";
-                case Spade:
-                    output += "♠";
-                case Club:
-                    output += "♣";
-                default:
-                    output += "?"; // Shouldn't happen
+        friend std::ostream &operator<<(std::ostream &os, const Card& card) {
+            os << card.cardValue;
+            os << " of ";
+
+            if(card.cardSuit == Diamond) {
+                os << "♦";
+            } else if(card.cardSuit == Heart) {
+                os << "♥";
+            } else if(card.cardSuit == Spade) {
+                os << "♠";
+            } else {
+                os << "♣";
             }
 
-            std::cout << output << std::endl;
+            return os;
         }
 
 };

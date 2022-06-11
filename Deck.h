@@ -1,7 +1,7 @@
 #ifndef DECK_H
 #define DECK_H
 
-#include "Card.h";
+#include "Card.h"
 #include <vector>
 #include <ctime>
 #include <random>
@@ -14,6 +14,7 @@ std::vector<char> faces{'j', 'q', 'k', 'a'};
 class Deck {
     public:
         std::vector<Card> cards;
+        std::vector<Card> cardsInPlay;
 
         Deck() {
             initializeDeck();
@@ -37,8 +38,16 @@ class Deck {
 
         /* Methods */
 
-        void shuffle() {
-            // TODO: Next on agenda
+        void shuffleDeck() {
+            std::random_device rand;
+            std::default_random_engine rng(rand());
+            shuffle(std::begin(cards), std::end(cards), rng);
+        }
+
+        Card draw() {
+            cardsInPlay.push_back(cards.back());
+            cards.pop_back();
+            return cardsInPlay.back();
         }
 };
 
