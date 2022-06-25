@@ -9,7 +9,8 @@
 
 using std::shuffle;
 
-std::vector<char> faces{'j', 'q', 'k', 'a'};
+// 10 wont fit in char
+std::vector<char> faces{'t', 'j', 'q', 'k', 'a'};
 
 class Deck {
     public:
@@ -21,14 +22,14 @@ class Deck {
         };
 
         void initializeDeck() {
-            for(int i = 2; i <= 10; i++) {
+            for(int i = 2; i < 10; i++) {
                 cards.push_back(Card(Diamond, i, i));
                 cards.push_back(Card(Heart, i, i));
                 cards.push_back(Card(Spade, i, i));
                 cards.push_back(Card(Club, i, i));
             }
             
-            for(int i = 0; i < 4; i++) {
+            for(int i = 0; i < 5; i++) {
                 cards.push_back(Card(Diamond, faces[i]));
                 cards.push_back(Card(Heart, faces[i]));
                 cards.push_back(Card(Spade, faces[i]));
@@ -47,7 +48,15 @@ class Deck {
         Card draw() {
             cardsInPlay.push_back(cards.back());
             cards.pop_back();
+
             return cardsInPlay.back();
+        }
+
+        void gatherCards() {
+            for(int i = 0; i < cardsInPlay.size(); ++i) {
+                cards.push_back(cardsInPlay.back());
+                cardsInPlay.pop_back();
+            }
         }
 };
 

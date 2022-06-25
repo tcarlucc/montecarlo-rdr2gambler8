@@ -100,7 +100,7 @@ class Card {
         }
 
         friend std::ostream &operator<<(std::ostream &os, const Card& card) {
-            os << card.cardValue;
+            os << card.trueValue;
             os << " of ";
 
             if(card.cardSuit == Diamond) {

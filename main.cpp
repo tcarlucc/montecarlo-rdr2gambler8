@@ -13,26 +13,104 @@
 #include <string>
 #include "Deck.h"
 
-int main() {
-    
-    Deck deck; // Initializes Deck
-    Card newCard = deck.draw();
-    std::cout << newCard << std::endl;
-
-    deck.shuffleDeck();
-    newCard = deck.draw();
-    std::cout << newCard << std::endl;
-
-    return 0;
-}
+std::vector<Card> dealerCards;
+std::vector<Card> playerCards;
+std::vector<Card> player2Cards;
+std::vector<Card> player3Cards;
+std::vector<Card> player4Cards;
 
 /**
  * @brief Simulates a game of blackjack with a given number of players
  * 
- * @param numPlayers integer value from 1-4
- * @return int: 0 on loss, 1 on win
+ * @param numPlayers integer value from 1-4, including the player
+ * @return int: 0 on loss/bust/push, 1 on 3 hit win
  */
-int simulateHand(int numPlayers) {
+int simulateHand(int numPlayers, Deck& deck);
+
+int simulateHand();
+
+int main() {
+    int result = 0;
+    int total = 0;
+    int simulate = 200;
+    double ratio = 0.0;   
+
+    for(int i = 0; i < simulate; ++i) { 
+        Deck deck; // Initializes Deck    
+        deck.shuffleDeck(); // Dealer shuffles once in game, R* attention to detail is pretty spot on so I'm keeping it at 1
+        result = simulateHand(1, deck);
+        total += result;
+        deck.gatherCards();
+    }
+
+    ratio = total / simulate;
+    std::cout << "Ratio: " << ratio << std::endl;
 
     return 0;
+}
+
+int simulateHand(int numPlayers, Deck& deck) {
+    int result = 0; 
+    
+    if(numPlayers == 1) {
+        int dealerSum, playerSum;
+        bool dealerBust = false;
+
+        dealerCards.push_back(deck.draw()); // Hidden
+        playerCards.push_back(deck.draw());
+        dealerCards.push_back(deck.draw()); // Shown
+        playerCards.push_back(deck.draw());
+
+        dealerSum = dealerCards[0].getTrueValue() + dealerCards[1].getTrueValue();
+        playerSum = playerCards[0].getTrueValue() + playerCards[1].getTrueValue();
+
+        if(playerSum == 21 || dealerSum == 21) { // Check for blackjack off the bat
+            result = 0; 
+        }
+        else { // Hit 1
+                playerCards.push_back(deck.draw());
+                playerSum += playerCards[2].getTrueValue();
+                if(playerSum >= 21) { 
+                    result = 0; 
+                } else { // Hit 2
+                    playerCards.push_back(deck.draw());
+                    playerSum += playerCards[3].getTrueValue();
+                    if(playerSum >= 21) { 
+                        result = 0; 
+                    } else { // Hit 3
+                        playerCards.push_back(deck.draw());
+                        playerSum += playerCards[4].getTrueValue();
+                        if(playerSum >= 22) {
+                            result = 0;
+                        } else {
+                            while(!dealerBust || dealerSum >= 17) { // Dealer will always stand on 17+
+                                int i = 2;
+                                dealerCards.push_back(deck.draw());
+                                dealerSum += dealerCards[i].getTrueValue();
+                                i++;
+                            }
+                            if(dealerBust || dealerSum < playerSum) {
+                                result = 1;
+                            } else {
+                                result = 0;
+                            }
+                        }
+                    }
+                }
+        }
+
+        // Debug
+        std::cout << dealerSum << std::endl;
+        std::cout << playerSum << std::endl;
+    }
+
+    // Clear all hands
+    dealerCards.clear();
+    playerCards.clear();
+
+    return result;
+}
+
+int simulateHand(Deck& deck) {
+    return simulateHand(1, deck);
 }
