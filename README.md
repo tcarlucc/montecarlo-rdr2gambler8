@@ -12,5 +12,8 @@ A Monte Carlo Simulation is defined by IBM as a mathematical technique used to e
 
 *Source: https://www.ibm.com/cloud/learn/monte-carlo-simulation*
 
+# The Logic
+For the player, the only viable outcome is that they hit three times, and the dealer busts or stands at a lower value than the player. For this reason, the player will only choose to hit until they bust or reach three hits. The dealer will hit until they bust or reach a number greater than or equal to 17, where they will stand.
+
 # Findings
 TBD :)
