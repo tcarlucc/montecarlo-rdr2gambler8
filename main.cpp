@@ -33,19 +33,18 @@ int simulateHand(Deck& deck);
 int main() {
     int result = 0;
     int total = 0;
-    int simulate = 150;
-    double ratio = 0.0;   
+    int simulate = 10000;
+    double ratio = 0.0;
+    Deck deck; // Initializes Deck
 
-    for(int i = 0; i < simulate; ++i) { 
-        Deck deck; // Initializes Deck    
+    for(int i = 0; i < simulate; ++i) {
         deck.shuffleDeck(); // Dealer shuffles once in game, R* attention to detail is pretty spot on so I'm keeping it at 1
         result = simulateHand(1, deck);
         total += result;
-        deck.gatherCards();
     }
 
-    ratio = total / simulate;
-    std::cout << "Ratio: " << ratio << std::endl;
+    // ratio = total / simulate;
+    std::cout << "Total Wins: " << total << std::endl;
 
     return 0;
 }
@@ -54,7 +53,8 @@ int simulateHand(int numPlayers, Deck& deck) {
     int result = 0; 
     
     if(numPlayers == 1) {
-        int dealerSum, playerSum;
+        int dealerSum = 0;
+        int playerSum = 0;
         bool dealerBust = false;
 
         std::unique_ptr<Card> drawnCard = nullptr;
@@ -105,10 +105,10 @@ int simulateHand(int numPlayers, Deck& deck) {
                                 dealerCards.emplace_back(*drawnCard);
 
                                 dealerSum += dealerCards[i].getTrueValue();
-                                if(dealerSum > 21) { dealerBust = false; }
+                                if(dealerSum > 21) { dealerBust = true; }
                                 i++;
                             }
-                            if(dealerBust || dealerSum < playerSum) {
+                            if(dealerSum < playerSum || dealerBust) {
                                 result = 1;
                             } else {
                                 result = 0;
@@ -119,13 +119,14 @@ int simulateHand(int numPlayers, Deck& deck) {
         }
 
         // Debug
-        std::cout << dealerSum << std::endl;
-        std::cout << playerSum << std::endl;
+        std::cout << "dealer: " << dealerSum << std::endl;
+        std::cout << "player: " << playerSum << std::endl;
     }
 
     // Clear all hands
     dealerCards.clear();
     playerCards.clear();
+    deck.gatherCards();
 
     return result;
 }

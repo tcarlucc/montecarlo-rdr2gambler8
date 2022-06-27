@@ -33,7 +33,7 @@ class Card {
         int calcTrueValue(char value) {
             if(isdigit(value)) {
                 return value;
-            } else if(value == 'j' || value == 'q' || value == 'k') {
+            } else if(value == 't' || value == 'j' || value == 'q' || value == 'k') {
                 return 10;
             } else { 
                 return 11; // Ace

@@ -40,9 +40,13 @@ class Deck {
         /* Methods */
 
         void shuffleDeck() {
+            srand(time(NULL));
+            int random = rand()%10;
             std::random_device rand;
             std::default_random_engine rng(rand());
-            shuffle(std::begin(cards), std::end(cards), rng);
+            for(int i = 0; i < random; ++i) {
+                shuffle(std::begin(cards), std::end(cards), rng);
+            }
         }
 
         Card draw() {
@@ -55,8 +59,8 @@ class Deck {
         void gatherCards() {
             for(int i = 0; i < cardsInPlay.size(); ++i) {
                 cards.push_back(cardsInPlay.back());
-                cardsInPlay.pop_back();
             }
+            cardsInPlay.clear();
         }
 };
 
