@@ -109,6 +109,7 @@ int simulateHand(int numPlayers, Deck& deck) {
                                 int i = 2;
                                 dealerCards.emplace_back(deck.draw());
                                 dealerSum += dealerCards[i].getTrueValue();
+                                if(dealerSum > 21) { dealerBust = false; }
                                 i++;
                             }
                             if(dealerBust || dealerSum < playerSum) {
