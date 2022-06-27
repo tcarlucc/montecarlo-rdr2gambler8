@@ -57,49 +57,43 @@ int simulateHand(int numPlayers, Deck& deck) {
         int dealerSum, playerSum;
         bool dealerBust = false;
 
-        std::unique_ptr<Card> dealerFirst;
-        dealerFirst = std::make_unique<Card>(deck.draw());
+        std::unique_ptr<Card> drawnCard = nullptr;
 
-        std::unique_ptr<Card> playerFirst;
-        playerFirst = std::make_unique<Card>(deck.draw());
+        drawnCard = std::make_unique<Card>(deck.draw());
+        dealerCards.emplace_back(*drawnCard); // Hidden
 
-        std::unique_ptr<Card> dealerSecond;
-        dealerSecond = std::make_unique<Card>(deck.draw());
+        drawnCard = std::make_unique<Card>(deck.draw());
+        playerCards.emplace_back(*drawnCard);
 
-        std::unique_ptr<Card> playerSecond;
-        playerSecond = std::make_unique<Card>(deck.draw());
+        drawnCard = std::make_unique<Card>(deck.draw());
+        dealerCards.emplace_back(*drawnCard); // Shown
 
-        dealerCards.emplace_back(*dealerFirst); // Hidden
-        playerCards.emplace_back(*playerFirst);
-        dealerCards.emplace_back(*dealerSecond); // Shown
-        playerCards.emplace_back(*playerSecond);
+        drawnCard = std::make_unique<Card>(deck.draw());
+        playerCards.emplace_back(*drawnCard);
 
         dealerSum = dealerCards[0].getTrueValue() + dealerCards[1].getTrueValue();
         playerSum = playerCards[0].getTrueValue() + playerCards[1].getTrueValue();
 
         if(playerSum == 21 || dealerSum == 21) { // Check for blackjack off the bat
             result = 0; 
-        }
+        } 
         else { // Hit 1
-                std::unique_ptr<Card> playerThird;
-                playerThird = std::make_unique<Card>(deck.draw());
-                playerCards.emplace_back(*playerThird);
+                drawnCard = std::make_unique<Card>(deck.draw());
+                playerCards.emplace_back(*drawnCard);
 
                 playerSum += playerCards[2].getTrueValue();
                 if(playerSum >= 21) { 
                     result = 0; 
                 } else { // Hit 2
-                    std::unique_ptr<Card> playerFourth;
-                    playerFourth = std::make_unique<Card>(deck.draw());
-                    playerCards.emplace_back(*playerFourth);
+                    drawnCard = std::make_unique<Card>(deck.draw());
+                    playerCards.emplace_back(*drawnCard);
                     
                     playerSum += playerCards[3].getTrueValue();
                     if(playerSum >= 21) { 
                         result = 0; 
                     } else { // Hit 3
-                        std::unique_ptr<Card> playerFifth;
-                        playerFifth = std::make_unique<Card>(deck.draw());
-                        playerCards.emplace_back(*playerFifth);
+                        drawnCard = std::make_unique<Card>(deck.draw());
+                        playerCards.emplace_back(*drawnCard);
 
                         playerSum += playerCards[4].getTrueValue();
                         if(playerSum >= 22) {
@@ -107,7 +101,9 @@ int simulateHand(int numPlayers, Deck& deck) {
                         } else {
                             while(!dealerBust || dealerSum >= 17) { // Dealer will always stand on 17+
                                 int i = 2;
-                                dealerCards.emplace_back(deck.draw());
+                                drawnCard = std::make_unique<Card>(deck.draw());
+                                dealerCards.emplace_back(*drawnCard);
+
                                 dealerSum += dealerCards[i].getTrueValue();
                                 if(dealerSum > 21) { dealerBust = false; }
                                 i++;
