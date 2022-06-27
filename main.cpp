@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <memory>
 #include "Deck.h"
 
 std::vector<Card> dealerCards;
@@ -27,12 +28,12 @@ std::vector<Card> player4Cards;
  */
 int simulateHand(int numPlayers, Deck& deck);
 
-int simulateHand();
+int simulateHand(Deck& deck);
 
 int main() {
     int result = 0;
     int total = 0;
-    int simulate = 200;
+    int simulate = 150;
     double ratio = 0.0;   
 
     for(int i = 0; i < simulate; ++i) { 
@@ -56,10 +57,22 @@ int simulateHand(int numPlayers, Deck& deck) {
         int dealerSum, playerSum;
         bool dealerBust = false;
 
-        dealerCards.push_back(deck.draw()); // Hidden
-        playerCards.push_back(deck.draw());
-        dealerCards.push_back(deck.draw()); // Shown
-        playerCards.push_back(deck.draw());
+        std::unique_ptr<Card> dealerFirst;
+        dealerFirst = std::make_unique<Card>(deck.draw());
+
+        std::unique_ptr<Card> playerFirst;
+        playerFirst = std::make_unique<Card>(deck.draw());
+
+        std::unique_ptr<Card> dealerSecond;
+        dealerSecond = std::make_unique<Card>(deck.draw());
+
+        std::unique_ptr<Card> playerSecond;
+        playerSecond = std::make_unique<Card>(deck.draw());
+
+        dealerCards.emplace_back(*dealerFirst); // Hidden
+        playerCards.emplace_back(*playerFirst);
+        dealerCards.emplace_back(*dealerSecond); // Shown
+        playerCards.emplace_back(*playerSecond);
 
         dealerSum = dealerCards[0].getTrueValue() + dealerCards[1].getTrueValue();
         playerSum = playerCards[0].getTrueValue() + playerCards[1].getTrueValue();
@@ -68,24 +81,33 @@ int simulateHand(int numPlayers, Deck& deck) {
             result = 0; 
         }
         else { // Hit 1
-                playerCards.push_back(deck.draw());
+                std::unique_ptr<Card> playerThird;
+                playerThird = std::make_unique<Card>(deck.draw());
+                playerCards.emplace_back(*playerThird);
+
                 playerSum += playerCards[2].getTrueValue();
                 if(playerSum >= 21) { 
                     result = 0; 
                 } else { // Hit 2
-                    playerCards.push_back(deck.draw());
+                    std::unique_ptr<Card> playerFourth;
+                    playerFourth = std::make_unique<Card>(deck.draw());
+                    playerCards.emplace_back(*playerFourth);
+                    
                     playerSum += playerCards[3].getTrueValue();
                     if(playerSum >= 21) { 
                         result = 0; 
                     } else { // Hit 3
-                        playerCards.push_back(deck.draw());
+                        std::unique_ptr<Card> playerFifth;
+                        playerFifth = std::make_unique<Card>(deck.draw());
+                        playerCards.emplace_back(*playerFifth);
+
                         playerSum += playerCards[4].getTrueValue();
                         if(playerSum >= 22) {
                             result = 0;
                         } else {
                             while(!dealerBust || dealerSum >= 17) { // Dealer will always stand on 17+
                                 int i = 2;
-                                dealerCards.push_back(deck.draw());
+                                dealerCards.emplace_back(deck.draw());
                                 dealerSum += dealerCards[i].getTrueValue();
                                 i++;
                             }
