@@ -16,4 +16,4 @@ A Monte Carlo Simulation is defined by IBM as a mathematical technique used to e
 For the player, the only viable outcome is that they hit three times, and the dealer busts or stands at a lower value than the player. For this reason, the player will only choose to hit until they bust or reach three hits. The dealer will hit until they bust or reach a number greater than or equal to 17, where they will stand.
 
 # Findings
-TBD :)
+So far, the odds of winning with 3 or more hits is so unlikely that it is almost certain that Rockstar would have to intervene with the probability somehow.

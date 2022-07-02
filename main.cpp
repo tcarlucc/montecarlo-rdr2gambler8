@@ -14,12 +14,6 @@
 #include <memory>
 #include "Deck.h"
 
-std::vector<Card> dealerCards;
-std::vector<Card> playerCards;
-std::vector<Card> player2Cards;
-std::vector<Card> player3Cards;
-std::vector<Card> player4Cards;
-
 /**
  * @brief Simulates a game of blackjack with a given number of players
  * 
@@ -33,12 +27,12 @@ int simulateHand(Deck& deck);
 int main() {
     int result = 0;
     int total = 0;
-    int simulate = 10000;
+    int simulate = 1000;
     double ratio = 0.0;
     Deck deck; // Initializes Deck
 
     for(int i = 0; i < simulate; ++i) {
-        deck.shuffleDeck(); // Dealer shuffles once in game, R* attention to detail is pretty spot on so I'm keeping it at 1
+        deck.shuffleDeck(); // Dealer shuffles once in game
         result = simulateHand(1, deck);
         total += result;
     }
@@ -50,11 +44,14 @@ int main() {
 }
 
 int simulateHand(int numPlayers, Deck& deck) {
-    int result = 0; 
+    int result = 0;
+    std::vector<Card> dealerCards;
+    std::vector<Card> playerCards;
     
     if(numPlayers == 1) {
         int dealerSum = 0;
         int playerSum = 0;
+
         bool dealerBust = false;
 
         std::unique_ptr<Card> drawnCard = nullptr;
@@ -83,7 +80,7 @@ int simulateHand(int numPlayers, Deck& deck) {
 
                 playerSum += playerCards[2].getTrueValue();
                 if(playerSum >= 21) { 
-                    result = 0; 
+                    result = 0;
                 } else { // Hit 2
                     drawnCard = std::make_unique<Card>(deck.draw());
                     playerCards.emplace_back(*drawnCard);
@@ -96,7 +93,7 @@ int simulateHand(int numPlayers, Deck& deck) {
                         playerCards.emplace_back(*drawnCard);
 
                         playerSum += playerCards[4].getTrueValue();
-                        if(playerSum >= 22) {
+                        if(playerSum > 21) {
                             result = 0;
                         } else {
                             while(!dealerBust || dealerSum >= 17) { // Dealer will always stand on 17+
@@ -106,7 +103,7 @@ int simulateHand(int numPlayers, Deck& deck) {
 
                                 dealerSum += dealerCards[i].getTrueValue();
                                 if(dealerSum > 21) { dealerBust = true; }
-                                i++;
+                                ++i;
                             }
                             if(dealerSum < playerSum || dealerBust) {
                                 result = 1;
